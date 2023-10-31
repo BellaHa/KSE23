@@ -29,3 +29,19 @@ src:
 
 ## Dependencies
 - GNU `g++`, `make`
+#### Note: You can build a bash file like this to embed your parameters for running code
+#!/bin/bash
+#
+#BSUB -J alg2_36692
+#BSUB -n 32
+#BSUB -R "span[ptile=32]"
+#BSUB -q normal
+#BSUB -e %J.error
+#BSUB -o %J.output
+g++ -std=c++11 *.cpp -o sol1_36692 -DIL_STD -fopenmp -g
+budgets=(500,1000, 1500,2000);
+echo "Algorithm,epsilon,Budget,no_nodes,f(s),size_seedsf,no_queries,time" >alg2_36692.csv;
+for budget in "${budgets[@]}"
+do
+  	./sol1_36692 -f data/Enron2.txt -V 36692 -t 0 -a 1 -e 0.1 -B $budget>>alg2_36692.csv;
+done
